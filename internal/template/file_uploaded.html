@@ -1,0 +1,15 @@
+<div class="alert alert-success" style="margin-top: 10px;">
+  <div>
+    <strong>File Uploaded Successfully!</strong>
+    <div style="font-size: 13px; margin-top: 4px;">Assigned File ID: <code>#{{.file}}</code></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const fileInput = document.getElementById('file_id_input');
+    if (fileInput) {
+      fileInput.value = "{{.file}}";
+    }
+  })();
+</script>

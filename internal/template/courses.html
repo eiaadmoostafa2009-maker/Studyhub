@@ -1,0 +1,88 @@
+{{if .courses}}
+<div class="course-grid">
+  {{range .courses}}
+  <div class="course-card" id="course-card-{{.ID}}">
+    <div class="course-info">
+      <div class="course-file-icon">DOC</div>
+      <div class="course-meta">
+        <h3 class="course-title">{{.Title}}</h3>
+        <span class="course-author">Shared by {{.UserName}}</span>
+      </div>
+    </div>
+
+    <div class="course-actions">
+      {{if .FileURL}}
+      <a 
+        href="/uploads/{{.FileURL}}" 
+        target="_blank" 
+        class="btn btn-primary btn-sm"
+        download
+      >
+        <span>Download</span>
+      </a>
+      {{end}}
+
+      <!-- Edit Course Toggle -->
+      <button 
+        type="button" 
+        class="btn btn-secondary btn-sm"
+        style="padding: 4px 8px; font-size: 11px;"
+        onclick="document.getElementById('course-edit-{{.ID}}').style.display = document.getElementById('course-edit-{{.ID}}').style.display === 'none' ? 'block' : 'none';"
+      >
+        Edit
+      </button>
+
+      <!-- Delete Course Button -->
+      <button 
+        type="button" 
+        class="btn btn-danger btn-sm"
+        style="padding: 4px 8px; font-size: 11px;"
+        hx-post="/course/{{.ID}}/delete" 
+        hx-target="#courses-stream" 
+        hx-swap="innerHTML"
+        hx-confirm="Are you sure you want to delete this course material?"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <!-- Inline Course Edit Box -->
+  <div id="course-edit-{{.ID}}" class="post-edit-box" style="display: none; margin: 8px 20px;">
+    <form 
+      hx-post="/course/{{.ID}}/update" 
+      hx-target="#courses-stream" 
+      hx-swap="innerHTML"
+    >
+      <div class="form-group">
+        <label class="form-label">Update Course Title</label>
+        <input type="text" name="title" value="{{.Title}}" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Replace File ID (Optional/Required)</label>
+        <input type="number" name="file_id" placeholder="Enter new or existing file ID" class="form-control" required>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm" 
+          onclick="document.getElementById('course-edit-{{.ID}}').style.display = 'none';"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary btn-sm">
+          <span>Save Changes</span>
+          <span class="htmx-indicator spinner"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+  {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">📚</div>
+  <h3 class="empty-state-title">No Courses Available</h3>
+  <p class="empty-state-desc">Teachers have not published any course materials yet.</p>
+</div>
+{{end}}

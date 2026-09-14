@@ -1,0 +1,104 @@
+{{if .posts}}
+<div class="posts-feed-stream">
+  {{range .posts}}
+  <article class="post-card" id="post-card-{{.ID}}">
+    <div class="avatar">{{if .UserName}}{{slice .UserName 0 1}}{{else}}U{{end}}</div>
+    
+    <div class="post-body">
+      <div class="post-header">
+        <div class="post-author-meta">
+          <span class="post-author-name">{{.UserName}}</span>
+          <span class="post-dot">&bull;</span>
+          <span class="post-date">{{.ReleaseDate.Format "Jan 02, 2006 15:04"}}</span>
+        </div>
+
+        <div class="post-actions-menu">
+          <!-- Edit Toggle Button -->
+          <button 
+            type="button" 
+            class="btn btn-secondary btn-sm" 
+            style="padding: 3px 8px; font-size: 11px;"
+            onclick="document.getElementById('edit-box-{{.ID}}').style.display = document.getElementById('edit-box-{{.ID}}').style.display === 'none' ? 'block' : 'none';"
+          >
+            Edit
+          </button>
+
+          <!-- Delete Button -->
+          <button 
+            type="button" 
+            class="btn btn-danger btn-sm" 
+            style="padding: 3px 8px; font-size: 11px;"
+            hx-delete="/posts/{{.ID}}/delete" 
+            hx-target="#feed-container" 
+            hx-swap="innerHTML"
+            hx-confirm="Are you sure you want to delete this post?"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <h3 class="post-title">{{.Title}}</h3>
+      <div class="post-content">{{.Content}}</div>
+
+      <!-- Inline Edit Box (hidden by default) -->
+      <div id="edit-box-{{.ID}}" class="post-edit-box" style="display: none;">
+        <form 
+          hx-put="/posts/{{.ID}}/update" 
+          hx-target="#feed-container" 
+          hx-swap="innerHTML"
+        >
+          <div class="form-group">
+            <label class="form-label">Update Title</label>
+            <input type="text" name="title" value="{{.Title}}" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Update Content</label>
+            <textarea name="content" class="form-control" required>{{.Content}}</textarea>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button 
+              type="button" 
+              class="btn btn-secondary btn-sm" 
+              onclick="document.getElementById('edit-box-{{.ID}}').style.display = 'none';"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <span>Save Changes</span>
+              <span class="htmx-indicator spinner"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Post Footer: Member Count & Join Button -->
+      <div class="post-footer">
+        <div class="post-stats">
+          <div class="stat-item">
+            <span>👥</span>
+            <span>{{len .Members}} {{if eq (len .Members) 1}}Member{{else}}Members{{end}}</span>
+          </div>
+        </div>
+
+        <button 
+          class="btn-join {{if .IsJoined}}joined{{end}}" 
+          hx-post="/posts/join/{{.ID}}" 
+          hx-target="#feed-container" 
+          hx-swap="innerHTML"
+        >
+          <span>{{if .IsJoined}}Joined ✓{{else}}Join Circle{{end}}</span>
+          <span class="htmx-indicator spinner"></span>
+        </button>
+      </div>
+    </div>
+  </article>
+  {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">📝</div>
+  <h3 class="empty-state-title">No Study Posts Yet</h3>
+  <p class="empty-state-desc">Be the first student to create a study circle or topic to collaborate with peers.</p>
+</div>
+{{end}}

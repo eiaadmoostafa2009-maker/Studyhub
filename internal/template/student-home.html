@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed - Studyhub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/feed.css">
+  <link rel="stylesheet" href="/css/courses.css">
+  <link rel="stylesheet" href="/css/modal.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- 1. Left Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="/user/home" class="brand">
+          <div class="brand-icon">S</div>
+          <span>Studyhub</span>
+        </a>
+
+        <ul class="nav-list">
+          <li class="nav-item active">
+            <a href="/user/home">
+              <span class="nav-icon">⊞</span>
+              <span>Home Feed</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/course/" hx-target="#feed-container" hx-swap="innerHTML">
+              <span class="nav-icon">📚</span>
+              <span>Courses</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+              <span class="nav-icon">👤</span>
+              <span>Profile</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Logged-in User Card in Sidebar -->
+      <div class="sidebar-user" hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+        <div class="avatar">{{if .user.Name}}{{slice .user.Name 0 1}}{{else}}U{{end}}</div>
+        <div class="user-info">
+          <span class="user-name">{{.user.Name}}</span>
+          <span class="user-role">{{.user.Role}} &bull; {{.user.School}}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. Center Feed Stream -->
+    <main class="app-main">
+      <header class="main-header">
+        <h1 class="header-title">Home Feed</h1>
+        <div class="badge">Student</div>
+      </header>
+
+      <!-- Post Composer (Create Post) -->
+      <section class="composer-card">
+        <div class="avatar">{{if .user.Name}}{{slice .user.Name 0 1}}{{else}}U{{end}}</div>
+        <form 
+          class="composer-form" 
+          hx-post="/posts/" 
+          hx-target="#feed-container" 
+          hx-swap="innerHTML" 
+          hx-on::after-request="if(event.detail.successful) this.reset()"
+        >
+          <input 
+            type="text" 
+            name="title" 
+            class="composer-input-title" 
+            placeholder="Study topic or subject title..." 
+            required
+          >
+          <textarea 
+            name="content" 
+            class="composer-input-content" 
+            placeholder="Describe what you want to study together, chapters, timing, or questions..." 
+            required
+          ></textarea>
+          
+          <div class="composer-footer">
+            <span class="composer-tools">Share with students</span>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <span>Post Study Circle</span>
+              <span class="htmx-indicator spinner"></span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Feed Container (loaded via HTMX) -->
+      <div 
+        id="feed-container" 
+        hx-get="/posts/" 
+        hx-trigger="load" 
+        hx-target="#feed-container" 
+        hx-swap="innerHTML"
+      >
+        <div class="empty-state">
+          <div class="spinner" style="width: 24px; height: 24px;"></div>
+          <p style="margin-top: 12px;">Loading study feed...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. Right Sidebar Widgets -->
+    <aside class="app-widgets">
+      <div class="widget-card">
+        <div class="widget-title">
+          <span>Available Courses</span>
+          <button class="btn btn-secondary btn-sm" hx-get="/course/" hx-target="#feed-container">View all</button>
+        </div>
+        <div id="widget-courses" hx-get="/course/" hx-trigger="load" hx-target="#widget-courses" hx-swap="innerHTML">
+          <p style="font-size: 13px; color: var(--text-muted);">Loading resources...</p>
+        </div>
+      </div>
+
+      <div class="widget-card">
+        <div class="widget-title">About Study Circles</div>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+          Join study posts created by fellow students to collaborate on assignments, exam prep, and group projects.
+        </p>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav">
+    <a href="/user/home" class="active">
+      <span>⊞</span>
+      <span>Feed</span>
+    </a>
+    <button hx-get="/course/" hx-target="#feed-container">
+      <span>📚</span>
+      <span>Courses</span>
+    </button>
+    <button hx-get="/user/profile" hx-target="#profile-modal-content" onclick="openModal('profile-modal')">
+      <span>👤</span>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Student Profile</h3>
+        <button class="modal-close" onclick="closeModal('profile-modal')">&times;</button>
+      </div>
+      <div id="profile-modal-content" class="modal-body">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+/* ==========================================================================
+   STUDYHUB - LAYOUT & NAVIGATION
+   Desktop 3-Column | Tablet 2-Column | Mobile 1-Column
+   ========================================================================== */
+
+/* Main Container */
+.app-container {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* 1. Left Sidebar Navigation */
+.app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-md);
+  border-right: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-sm) var(--space-lg) var(--space-sm);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--text-primary);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item a, .nav-item button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-full);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  text-decoration: none;
+}
+
+.nav-item a:hover, .nav-item button:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-item.active a, .nav-item.active button {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User Profile Widget in Sidebar Bottom */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-user:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-medium);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* 2. Main Content Stream */
+.app-main {
+  flex: 1;
+  max-width: 640px;
+  min-height: 100vh;
+  border-right: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+}
+
+.main-header {
+  position: sticky;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 14px 20px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* 3. Right Sidebar / Widget Area */
+.app-widgets {
+  width: 340px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  overflow-y: auto;
+}
+
+.widget-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.widget-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Mobile Bottom Navigation Bar */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 8px 16px;
+  z-index: 1000;
+  justify-content: space-around;
+}
+
+.mobile-nav a, .mobile-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mobile-nav a.active, .mobile-nav button.active {
+  color: var(--text-primary);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1080px) {
+  .app-widgets {
+    display: none;
+  }
+  .app-main {
+    max-width: 700px;
+    border-right: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-sidebar {
+    width: 76px;
+    padding: var(--space-md) var(--space-xs);
+    align-items: center;
+  }
+  .brand span, .nav-item span, .user-info {
+    display: none;
+  }
+  .brand {
+    padding: 0 0 var(--space-md) 0;
+  }
+  .nav-item a, .nav-item button {
+    justify-content: center;
+    padding: 12px;
+  }
+  .sidebar-user {
+    padding: 6px;
+    border-radius: var(--radius-full);
+  }
+  .app-main {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .app-sidebar {
+    display: none;
+  }
+  .mobile-nav {
+    display: flex;
+  }
+  .app-main {
+    padding-bottom: 70px;
+  }
+  .main-header {
+    padding: 12px 16px;
+  }
+}

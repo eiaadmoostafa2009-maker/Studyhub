@@ -1,0 +1,109 @@
+/* ==========================================================================
+   STUDYHUB - COURSES & LEARNING RESOURCES
+   Card and List layouts for materials and shared files
+   ========================================================================== */
+
+.course-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  transition: background-color var(--transition-fast);
+}
+
+.course-card:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.course-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.course-file-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.course-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.course-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-author {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.course-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+/* Upload Dropzone Box */
+.upload-dropzone {
+  border: 2px dashed var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  background-color: var(--bg-surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: var(--space-md);
+}
+
+.upload-dropzone:hover {
+  border-color: var(--text-primary);
+  background-color: var(--bg-hover);
+}
+
+.upload-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.upload-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.upload-subtext {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}

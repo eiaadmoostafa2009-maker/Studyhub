@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Workspace - Studyhub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/feed.css">
+  <link rel="stylesheet" href="/css/courses.css">
+  <link rel="stylesheet" href="/css/modal.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- 1. Left Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="/user/home" class="brand">
+          <div class="brand-icon">S</div>
+          <span>Studyhub</span>
+        </a>
+
+        <ul class="nav-list">
+          <li class="nav-item active">
+            <a href="/user/home">
+              <span class="nav-icon">📚</span>
+              <span>Course Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+              <span class="nav-icon">👤</span>
+              <span>Profile</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Logged-in User Card in Sidebar -->
+      <div class="sidebar-user" hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+        <div class="avatar">{{if .user.Name}}{{slice .user.Name 0 1}}{{else}}T{{end}}</div>
+        <div class="user-info">
+          <span class="user-name">{{.user.Name}}</span>
+          <span class="user-role">Teacher &bull; {{.user.School}}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. Center Content Stream -->
+    <main class="app-main">
+      <header class="main-header">
+        <h1 class="header-title">Educator Portal</h1>
+        <div class="badge">Teacher</div>
+      </header>
+
+      <!-- Course Share Panel -->
+      <section style="padding: 20px; border-bottom: 1px solid var(--border-subtle); background-color: var(--bg-surface);">
+        <h3 style="margin-bottom: 12px; font-size: 16px;">Publish Course Material</h3>
+        
+        <!-- Step 1: Upload File -->
+        <div id="file-upload-section">
+          <form 
+            hx-post="/course/upload" 
+            hx-target="#upload-result-container" 
+            hx-swap="innerHTML" 
+            hx-encoding="multipart/form-data"
+            style="margin-bottom: 14px;"
+          >
+            <div class="form-group">
+              <label class="form-label" for="file_name">Material / Document Name</label>
+              <input 
+                type="text" 
+                id="file_name" 
+                name="file_name" 
+                class="form-control" 
+                placeholder="e.g. Lecture 01 - Algorithms.pdf" 
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="course-file">Select File</label>
+              <input 
+                type="file" 
+                id="course-file" 
+                name="file" 
+                class="form-control" 
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn btn-secondary btn-sm">
+              <span>Upload Document</span>
+              <span class="htmx-indicator spinner"></span>
+            </button>
+          </form>
+
+          <div id="upload-result-container"></div>
+        </div>
+
+        <!-- Step 2: Publish Course with File ID -->
+        <div class="divider"></div>
+        <form 
+          hx-post="/course/" 
+          hx-target="#courses-stream" 
+          hx-swap="innerHTML"
+          hx-on::after-request="if(event.detail.successful) { this.reset(); htmx.ajax('GET', '/course/', '#courses-stream'); }"
+        >
+          <div class="form-group">
+            <label class="form-label" for="course_title">Course Title</label>
+            <input 
+              type="text" 
+              id="course_title" 
+              name="title" 
+              class="form-control" 
+              placeholder="e.g. CS101: Introduction to Computer Science" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="file_id_input">Uploaded File ID</label>
+            <input 
+              type="number" 
+              id="file_id_input" 
+              name="file_id" 
+              class="form-control" 
+              placeholder="Enter File ID from upload step above" 
+              required
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm">
+            <span>Publish Course</span>
+            <span class="htmx-indicator spinner"></span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Course List -->
+      <section style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+        <h2 style="font-size: 16px; font-weight: 700;">All Published Courses</h2>
+        <button class="btn btn-secondary btn-sm" hx-get="/course/" hx-target="#courses-stream">Refresh</button>
+      </section>
+
+      <div 
+        id="courses-stream" 
+        hx-get="/course/" 
+        hx-trigger="load" 
+        hx-target="#courses-stream" 
+        hx-swap="innerHTML"
+      >
+        <div class="empty-state">
+          <div class="spinner" style="width: 24px; height: 24px;"></div>
+          <p style="margin-top: 12px;">Loading course materials...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. Right Sidebar -->
+    <aside class="app-widgets">
+      <div class="widget-card">
+        <div class="widget-title">Teacher Guidance</div>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+          Upload syllabi, lecture slides, notes, or reference documents. Students across your institution can access published files directly.
+        </p>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav">
+    <a href="/user/home" class="active">
+      <span>📚</span>
+      <span>Dashboard</span>
+    </a>
+    <button hx-get="/user/profile" hx-target="#profile-modal-content" onclick="openModal('profile-modal')">
+      <span>👤</span>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Teacher Profile</h3>
+        <button class="modal-close" onclick="closeModal('profile-modal')">&times;</button>
+      </div>
+      <div id="profile-modal-content" class="modal-body">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

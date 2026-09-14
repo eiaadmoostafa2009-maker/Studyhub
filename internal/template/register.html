@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Studyhub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="/" class="auth-brand">
+          <div class="brand-icon">S</div>
+          <span>Studyhub</span>
+        </a>
+        <h1 class="auth-title">Create your account</h1>
+        <p class="auth-subtitle">Join thousands of students and teachers</p>
+      </div>
+
+      {{if .message}}
+      <div class="alert alert-error">
+        <span>{{.message}}</span>
+      </div>
+      {{end}}
+
+      <form action="/user/register" method="POST" hx-post="/user/register" hx-swap="outerHTML">
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            class="form-control" 
+            placeholder="John Doe" 
+            required 
+            minlength="3"
+            autocomplete="name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-control" 
+            placeholder="john@school.edu" 
+            required 
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="school">University / School</label>
+          <input 
+            type="text" 
+            id="school" 
+            name="school" 
+            class="form-control" 
+            placeholder="Faculty of Computer Science" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">I am a</label>
+          <div class="role-selector">
+            <label class="role-option">
+              <input type="radio" name="role" value="student" checked>
+              <span class="role-label">Student</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="teacher">
+              <span class="role-label">Teacher</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-control" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="new-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 12px;">
+          <span>Register</span>
+          <span class="htmx-indicator spinner"></span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/user/login">Log in</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studyhub - Modern Academic Collaboration</title>
+  <meta name="description" content="A minimalist, high-performance academic platform for students, teachers, and study groups.">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body style="display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh;">
+
+  <!-- Navigation Bar -->
+  <header style="border-bottom: 1px solid var(--border-subtle); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; max-width: 1200px; width: 100%; margin: 0 auto;">
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800;">
+      <div class="brand-icon">S</div>
+      <span>Studyhub</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/user/login" class="btn btn-secondary btn-sm">Log in</a>
+      <a href="/user/register" class="btn btn-primary btn-sm">Sign up</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main style="max-width: 900px; margin: 60px auto; padding: 0 24px; text-align: center;">
+    <div class="badge" style="margin-bottom: 20px;">Academic Network Platform</div>
+    <h1 style="font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 20px; line-height: 1.1;">
+      Connect, collaborate, and study in one focused feed.
+    </h1>
+    <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-secondary); max-width: 620px; margin: 0 auto 36px auto; line-height: 1.6;">
+      Studyhub delivers a distraction-free, high-speed workspace where students build study circles and educators publish vital course resources.
+    </p>
+    
+    <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+      <a href="/user/register" class="btn btn-primary" style="padding: 14px 28px; font-size: 16px;">Get Started Free</a>
+      <a href="/user/login" class="btn btn-secondary" style="padding: 14px 28px; font-size: 16px;">Sign In to Account</a>
+    </div>
+
+    <!-- Feature Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 80px; text-align: left;">
+      <div class="widget-card">
+        <h3 style="margin-bottom: 8px;">Study Groups</h3>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          Create or join study posts with one click. Collaborate with peers from your school and track active group members.
+        </p>
+      </div>
+      <div class="widget-card">
+        <h3 style="margin-bottom: 8px;">Course Sharing</h3>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          Educators upload and distribute lecture notes, slides, and study materials directly to enrolled students.
+        </p>
+      </div>
+      <div class="widget-card">
+        <h3 style="margin-bottom: 8px;">Focused & Fast</h3>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          Engineered with Go and HTMX for instantaneous server-rendered updates with zero algorithmic clutter.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border-subtle); padding: 24px; text-align: center; font-size: 13px; color: var(--text-muted);">
+    &copy; 2026 Studyhub. All rights reserved. Built for focused learning.
+  </footer>
+
+</body>
+</html>
