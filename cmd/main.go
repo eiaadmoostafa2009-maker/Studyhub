@@ -57,6 +57,14 @@ func main(){
 	userService := userServe.NewUserService(cfg, userRepo)
 	postService := postServe.NewPostService(cfg, postRepo)
 	courseService := courseServe.NewCourseService(cfg, courseRepo)
+
+	//creating admin account
+	status, err := userService.SeedAdmin()
+    if err != nil {
+       log.Fatal("failed to seed admin:", err)
+    }
+
+    log.Println("admin seed completed with status:", status)
 	
 
 	// Initialize the handlers

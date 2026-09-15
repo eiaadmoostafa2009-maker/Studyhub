@@ -22,35 +22,35 @@ func (s *userService) Login(ctx context.Context, req *dto.LoginRequest) (string,
     }
 
 	if err != nil {
-		return "", "", 404, err
+		return "", "", http.StatusNotFound, err
 	}
 	//check if password is correct
 	bcryptErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if bcryptErr != nil {
-		return "", "", 401, errors.New("invalid password")
+		return "", "", http.StatusUnauthorized, errors.New("invalid password")
 	}
 	//generate tokens
 	token, err := jwt.GenerateToken(user.ID, user.Name, s.config.SecretKey)
 	if err != nil {
-		return "", "", 500, err
+		return "", "", http.StatusInternalServerError, err
 	}
 	refreshToken, err := jwt.GenerateRefreshToken(user.ID, s.config.SecretKey)
 	if err != nil {
-		return "", "", 500, err
+		return "", "", http.StatusInternalServerError, err
 	}
 
 	//get existing refresh token
 	existingRefreshToken, err := s.repo.GetRefreshTokenByUserID(ctx, user.ID)
 	
 	if err != nil {
-		return "", "", 500, err
+		return "", "", http.StatusInternalServerError, err
 	}
 
 	//generate new refresh token if existing one is expired or not found
 	if existingRefreshToken == nil || existingRefreshToken.ExpiresAt.Before(time.Now()) {
 		refreshToken, err = jwt.GenerateRefreshToken(user.ID, s.config.SecretKey)
 		if err != nil {
-			return "", "", 500, err
+			return "", "", http.StatusInternalServerError, err
 		}
 	}
     
@@ -64,7 +64,7 @@ func (s *userService) Login(ctx context.Context, req *dto.LoginRequest) (string,
 		UpdatedAt: time.Now(),
 	})
 	if err != nil {
-		return "", "", 500, err
+		return "", "", http.StatusInternalServerError, err
 	}
-	return token, refreshToken, 200, nil
+	return token, refreshToken, http.StatusOK, nil
 }
