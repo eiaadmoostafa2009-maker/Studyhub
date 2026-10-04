@@ -1,0 +1,42 @@
+{{if .courses}}
+<div class="course-grid">
+  {{range .courses}}
+  <div class="course-card" id="course-card-{{.ID}}" data-owner-id="{{.UserID}}">
+    <div class="course-info">
+      <div class="course-file-icon">VID</div>
+      <div class="course-meta">
+        <h3 class="course-title">{{.Title}}</h3>
+        <span class="course-author">Shared by {{.UserName}}</span>
+      </div>
+    </div>
+
+    <div class="course-actions">
+      {{if .YoutubeUrl}}
+      <a class="btn btn-primary btn-sm" href="{{.YoutubeUrl}}" target="_blank" rel="noopener noreferrer">Watch</a>
+      {{end}}
+
+      <!-- Delete Course Button -->
+      <button 
+        type="button" 
+        class="btn btn-danger btn-sm" 
+        style="padding: 4px 8px; font-size: 11px;"
+        hx-post="/course/{{.ID}}/delete" 
+        hx-target="this" 
+        hx-swap="none"
+        hx-confirm="Are you sure you want to delete this course material?"
+        hx-on::after-request="if(event.detail.xhr.status===204) htmx.ajax('GET','/course/',{target:this.closest('.course-grid').parentElement, swap:'innerHTML'})"
+        data-action="course-delete"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+  {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">📚</div>
+  <h3 class="empty-state-title">No Courses Available</h3>
+  <p class="empty-state-desc">Teachers have not published any course materials yet.</p>
+</div>
+{{end}}

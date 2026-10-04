@@ -1,0 +1,22 @@
+# Litestream runs Studyhub and continuously replicates its SQLite WAL to GCS.
+# LITESTREAM_BUCKET is supplied by the VM/container environment.
+
+exec: /app/studyhub
+
+snapshot:
+  interval: 1h
+  retention: 168h
+
+validation:
+  interval: 6h
+
+# Give SQLite a little time to release transient locks during checkpoints.
+busy-timeout: 5s
+
+dbs:
+  - path: ${DATABASE_PATH}
+    restore-if-db-not-exists: true
+    replica:
+      url: gs://${LITESTREAM_BUCKET}/studyhub
+      sync-interval: 5s
+      auto-recover: true

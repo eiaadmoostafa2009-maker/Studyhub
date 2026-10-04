@@ -1,0 +1,18 @@
+<div class="post-flash">
+  <div class="alert alert-success" style="margin: 16px 20px;">
+    <span>{{if .message}}{{.message}}{{else}}Operation completed successfully{{end}}</span>
+  </div>
+
+  <!-- Auto refresh feed stream -->
+  <div 
+    hx-get="/posts/" 
+    hx-trigger="load delay:300ms" 
+    hx-target="closest .post-flash" 
+    hx-swap="outerHTML"
+  >
+    <div class="empty-state">
+      <div class="spinner"></div>
+      <p style="margin-top: 8px;">Refreshing feed...</p>
+    </div>
+  </div>
+</div>

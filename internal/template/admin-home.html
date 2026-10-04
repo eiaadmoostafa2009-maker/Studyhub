@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Studysite</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/feed.css">
+  <link rel="stylesheet" href="/css/courses.css">
+  <link rel="stylesheet" href="/css/modal.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body data-user-id="{{.user.ID}}" data-user-name="{{.user.Name}}" data-user-role="{{.user.Role}}">
+
+  <div class="app-container">
+
+    <!-- 1. Left Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="/user/home" class="brand">
+          <div class="brand-icon">S</div>
+          <span>Studysite</span>
+        </a>
+
+        <ul class="nav-list">
+          <li class="nav-item active">
+            <a href="/user/home">
+              <span class="nav-icon">🛡️</span>
+              <span>Overview</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/posts/" hx-target="#admin-main-container" hx-swap="innerHTML">
+              <span class="nav-icon">📝</span>
+              <span>Moderate Posts</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/course/" hx-target="#admin-main-container" hx-swap="innerHTML">
+              <span class="nav-icon">📚</span>
+              <span>Moderate Courses</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+              <span class="nav-icon">👤</span>
+              <span>Admin Profile</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Logged-in User Card in Sidebar -->
+      <div class="sidebar-user" hx-get="/user/profile" hx-target="#profile-modal-content" hx-swap="innerHTML" onclick="openModal('profile-modal')">
+        <div class="avatar" data-initial="{{.user.Name}}">A</div>
+        <div class="user-info">
+          <span class="user-name">{{.user.Name}}</span>
+          <span class="user-role">Administrator</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. Main Administration Area -->
+    <main class="app-main">
+      <header class="main-header">
+        <h1 class="header-title">System Moderation</h1>
+        <div class="badge badge-inverted">Admin</div>
+      </header>
+
+      <!-- User Moderation Action Box -->
+      <section style="padding: 20px; border-bottom: 1px solid var(--border-subtle); background-color: var(--bg-surface);">
+        <h3 style="margin-bottom: 12px; font-size: 15px;">User Moderation</h3>
+        <form 
+          hx-post="/user/delete" 
+          hx-target="#user-mod-result"
+          hx-confirm="Are you sure you want to permanently delete this user?"
+          hx-on::config-request="event.detail.path='/user/'+event.detail.parameters.user_id+'/delete'"
+          style="margin-bottom: 14px;"
+        >
+          <div style="display: flex; gap: 8px;">
+            <input 
+              type="number" 
+              name="user_id" 
+              class="form-control" 
+              placeholder="Target User ID to remove..." 
+              required
+              style="max-width: 260px;"
+            >
+            <button type="submit" class="btn btn-danger btn-sm">
+              <span>Delete User</span>
+              <span class="htmx-indicator spinner"></span>
+            </button>
+          </div>
+        </form>
+        <div id="user-mod-result" data-swap-errors style="margin-top: 10px; margin-bottom: 14px;"></div>
+
+        <div class="divider"></div>
+
+        <form 
+          hx-post="/user/delete" 
+          hx-target="#user-name-mod-result"
+          hx-confirm="Permanently delete the user with this exact username? This cannot be undone."
+        >
+          <div style="display: flex; gap: 8px;">
+            <input 
+              type="text" 
+              name="name" 
+              class="form-control" 
+              placeholder="Target Username to remove..." 
+              required
+              style="max-width: 260px;"
+            >
+            <button type="submit" class="btn btn-danger btn-sm">
+              <span>Delete by Name</span>
+              <span class="htmx-indicator spinner"></span>
+            </button>
+          </div>
+        </form>
+        <div id="user-name-mod-result" data-swap-errors style="margin-top: 10px;"></div>
+      </section>
+
+      <!-- Publish Course Section -->
+      <section style="padding: 20px; border-bottom: 1px solid var(--border-subtle); background-color: var(--bg-surface);">
+        <h3 style="margin-bottom: 12px; font-size: 15px;">Publish Approved Course</h3>
+        <form 
+          hx-post="/course/0/publish" 
+          hx-target="#publish-result"
+          hx-disabled-elt="find button[type=submit]"
+          hx-on::config-request="prepareCoursePublish(event)"
+          hx-on::after-request="if(event.detail.successful){ this.reset(); htmx.ajax('GET','/course/',{target:'#admin-courses-widget'}); }"
+        >
+          <div class="form-group">
+            <label class="form-label" for="submission_id">Submission ID (from the Telegram message)</label>
+            <input 
+              type="number" 
+              id="submission_id" 
+              name="submission_id" 
+              min="1" 
+              class="form-control" 
+              placeholder="e.g. 1" 
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="youtube_url">YouTube URL</label>
+            <input 
+              type="url" 
+              id="youtube_url" 
+              name="youtube_url" 
+              class="form-control" 
+              placeholder="https://www.youtube.com/watch?v=..." 
+              required
+            >
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <span>Publish Course</span>
+            <span class="htmx-indicator spinner"></span>
+          </button>
+        </form>
+        <div id="publish-result" data-swap-errors style="margin-top: 10px;"></div>
+      </section>
+
+      <!-- Main Moderation Stream Container -->
+      <div id="admin-main-container">
+        <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+          <h2 style="font-size: 16px; font-weight: 700;">Active Study Posts</h2>
+          <button class="btn btn-secondary btn-sm" hx-get="/posts/" hx-target="#posts-stream">Refresh</button>
+        </div>
+        <div 
+          id="posts-stream" 
+          hx-get="/posts/" 
+          hx-trigger="load" 
+          hx-target="#posts-stream" 
+          hx-swap="innerHTML"
+        >
+          <div class="empty-state">
+            <div class="spinner" style="width: 24px; height: 24px;"></div>
+            <p style="margin-top: 12px;">Loading posts for moderation...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. Right Sidebar -->
+    <aside class="app-widgets">
+      <div class="widget-card">
+        <div class="widget-title">Administrator Tools</div>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+          Administrators can delete inappropriate study posts, purge violating user accounts, and publish approved course submissions.
+        </p>
+      </div>
+
+      <div class="widget-card">
+        <div class="widget-title">
+          <span>Course Materials</span>
+          <button class="btn btn-secondary btn-sm" hx-get="/course/" hx-target="#admin-main-container">Manage</button>
+        </div>
+        <div id="admin-courses-widget" hx-get="/course/" hx-trigger="load" hx-target="#admin-courses-widget" hx-swap="innerHTML">
+          <p style="font-size: 13px; color: var(--text-muted);">Loading courses...</p>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav">
+    <a href="/user/home" class="active">
+      <span>🛡️</span>
+      <span>Admin</span>
+    </a>
+    <button hx-get="/posts/" hx-target="#admin-main-container">
+      <span>📝</span>
+      <span>Posts</span>
+    </button>
+    <button hx-get="/course/" hx-target="#admin-main-container">
+      <span>📚</span>
+      <span>Courses</span>
+    </button>
+    <button hx-get="/user/profile" hx-target="#profile-modal-content" onclick="openModal('profile-modal')">
+      <span>👤</span>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Admin Profile</h3>
+        <button class="modal-close" onclick="closeModal('profile-modal')">&times;</button>
+      </div>
+      <div id="profile-modal-content" class="modal-body">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

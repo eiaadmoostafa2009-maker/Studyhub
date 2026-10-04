@@ -1,0 +1,33 @@
+{{if .user}}
+<div class="profile-hero">
+  <div class="avatar avatar-lg">{{if .user.Name}}{{slice .user.Name 0 1}}{{else}}U{{end}}</div>
+  <h2 class="profile-name">{{.user.Name}}</h2>
+  <span class="badge badge-inverted profile-role-badge">{{.user.Role}}</span>
+</div>
+
+<div class="profile-details-grid">
+  <div class="profile-detail-item">
+    <div class="profile-detail-label">Email Address</div>
+    <div class="profile-detail-value">{{.user.Email}}</div>
+  </div>
+
+  <div class="profile-detail-item">
+    <div class="profile-detail-label">Institution</div>
+    <div class="profile-detail-value">{{.user.School}}</div>
+  </div>
+
+  <div class="profile-detail-item">
+    <div class="profile-detail-label">User ID</div>
+    <div class="profile-detail-value">#{{.user.ID}}</div>
+  </div>
+
+  <div class="profile-detail-item">
+    <div class="profile-detail-label">Member Role</div>
+    <div class="profile-detail-value" style="text-transform: capitalize;">{{.user.Role}}</div>
+  </div>
+</div>
+{{else}}
+<div class="empty-state">
+  <p>User profile information is currently unavailable.</p>
+</div>
+{{end}}

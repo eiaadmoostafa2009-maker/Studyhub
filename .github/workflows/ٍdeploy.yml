@@ -1,0 +1,33 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27'
+
+      - name: Stop running app
+        shell: powershell
+        run: |
+          Stop-Process -Name "main" -Force -ErrorAction SilentlyContinue
+
+      - name: Build
+        shell: powershell
+        run: |
+          $env:CGO_ENABLED="1"
+          go build -o main.exe .\cmd\main.go
+
+      - name: Restart app
+        shell: powershell
+        run: |
+          Start-Process -FilePath ".\main.exe" -WindowStyle Hidden

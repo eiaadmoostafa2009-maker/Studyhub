@@ -1,0 +1,3 @@
+<div class="alert {{if eq .Type "error"}}alert-error{{else}}alert-success{{end}}" style="margin: 14px 0;">
+  <span>{{if .Message}}{{.Message}}{{else if .message}}{{.message}}{{else}}Action completed successfully.{{end}}</span>
+</div>
