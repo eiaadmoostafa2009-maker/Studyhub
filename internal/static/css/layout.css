@@ -1,6 +1,7 @@
 /* ==========================================================================
-   STUDYHUB - LAYOUT & NAVIGATION
-   Desktop 3-Column | Tablet 2-Column | Mobile 1-Column
+   STUDYX - LAYOUT & NAVIGATION
+   X's three-column shell: nav (275) | timeline (600) | widgets (350)
+   Tablet: icon rail + timeline.  Phone: timeline + bottom tab bar.
    ========================================================================== */
 
 /* Main Container */
@@ -15,7 +16,7 @@
 
 /* 1. Left Sidebar Navigation */
 .app-sidebar {
-  width: 260px;
+  width: 275px;
   flex-shrink: 0;
   position: sticky;
   top: 0;
@@ -23,8 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: var(--space-lg) var(--space-md);
-  border-right: 1px solid var(--border-subtle);
+  padding: var(--space-sm) var(--space-md) var(--space-md) var(--space-sm);
   background-color: var(--bg-primary);
   z-index: 100;
 }
@@ -32,26 +32,31 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 0 var(--space-sm) var(--space-lg) var(--space-sm);
-  font-size: 20px;
+  gap: 12px;
+  padding: 10px 12px var(--space-md) 12px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   text-decoration: none;
 }
 
+.brand:hover {
+  text-decoration: none;
+}
+
 .brand-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
-  background-color: var(--text-primary);
-  color: var(--text-inverse);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: var(--accent);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 19px;
+  flex-shrink: 0;
 }
 
 .nav-list {
@@ -64,17 +69,19 @@
 .nav-item a, .nav-item button {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  width: 100%;
-  padding: 12px 16px;
+  gap: 20px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 12px 20px 12px 12px;
   border-radius: var(--radius-full);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-primary);
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast);
   text-align: left;
   text-decoration: none;
 }
@@ -91,40 +98,41 @@
 }
 
 .nav-icon {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 20px;
 }
 
 /* User Profile Widget in Sidebar Bottom */
 .sidebar-user {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 12px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--border-subtle);
-  background-color: var(--bg-surface);
+  border: none;
+  background-color: transparent;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .sidebar-user:hover {
   background-color: var(--bg-hover);
-  border-color: var(--border-medium);
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  line-height: 1.2;
+  line-height: 1.25;
+  min-width: 0;
 }
 
 .user-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
@@ -133,16 +141,21 @@
 }
 
 .user-role {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 14px;
+  color: var(--text-secondary);
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 2. Main Content Stream */
+/* 2. Main Content Stream (the "timeline") */
 .app-main {
   flex: 1;
-  max-width: 640px;
+  max-width: 600px;
+  min-width: 0;
   min-height: 100vh;
+  border-left: 1px solid var(--border-subtle);
   border-right: 1px solid var(--border-subtle);
   background-color: var(--bg-primary);
 }
@@ -150,11 +163,12 @@
 .main-header {
   position: sticky;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: var(--bg-blur);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 14px 20px;
+  min-height: 53px;
+  padding: 0 16px;
   z-index: 90;
   display: flex;
   align-items: center;
@@ -162,40 +176,41 @@
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
 /* 3. Right Sidebar / Widget Area */
 .app-widgets {
-  width: 340px;
+  width: 350px;
   flex-shrink: 0;
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: var(--space-lg) var(--space-md);
+  padding: 12px var(--space-sm) var(--space-md) 24px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: 16px;
   overflow-y: auto;
 }
 
 .widget-card {
   background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: none;
   border-radius: var(--radius-lg);
-  padding: var(--space-md);
+  padding: 12px 16px 16px 16px;
 }
 
 .widget-title {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   margin-bottom: var(--space-sm);
   color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-sm);
 }
 
 /* Mobile Bottom Navigation Bar */
@@ -205,11 +220,11 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.92);
+  background-color: var(--bg-blur-strong);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border-subtle);
-  padding: 8px 16px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)) 16px;
   z-index: 1000;
   justify-content: space-around;
 }
@@ -218,18 +233,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
+  gap: 2px;
+  min-width: 64px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-secondary);
   background: transparent;
   border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-decoration: none;
 }
 
+.mobile-nav a > span:first-child,
+.mobile-nav button > span:first-child {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
 .mobile-nav a.active, .mobile-nav button.active {
   color: var(--text-primary);
+  font-weight: 700;
 }
 
 /* Responsive Media Queries */
@@ -237,23 +262,19 @@
   .app-widgets {
     display: none;
   }
-  .app-main {
-    max-width: 700px;
-    border-right: none;
-  }
 }
 
 @media (max-width: 768px) {
   .app-sidebar {
     width: 76px;
-    padding: var(--space-md) var(--space-xs);
+    padding: var(--space-sm) var(--space-xs);
     align-items: center;
   }
-  .brand span, .nav-item span, .user-info {
+  .brand span, .nav-item span:not(.nav-icon), .user-info {
     display: none;
   }
   .brand {
-    padding: 0 0 var(--space-md) 0;
+    padding: 8px 0 var(--space-md) 0;
   }
   .nav-item a, .nav-item button {
     justify-content: center;
@@ -276,9 +297,14 @@
     display: flex;
   }
   .app-main {
-    padding-bottom: 70px;
+    padding-bottom: 76px;
+    border-left: none;
+    border-right: none;
   }
   .main-header {
-    padding: 12px 16px;
+    padding: 0 16px;
+  }
+  .toast-region {
+    bottom: 84px;
   }
 }

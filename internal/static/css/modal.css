@@ -1,6 +1,6 @@
 /* ==========================================================================
-   STUDYHUB - MODALS & POPUPS
-   Accessible, Clean Backdrop & Surface Card
+   STUDYX - MODALS & POPUPS
+   X-style dialog: slate scrim, rounded surface, circular close button.
    ========================================================================== */
 
 .modal-backdrop {
@@ -9,9 +9,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background-color: var(--scrim);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,7 +17,7 @@
   padding: var(--space-md);
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-normal);
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
 }
 
 .modal-backdrop.open, .modal-backdrop:target {
@@ -28,15 +26,15 @@
 }
 
 .modal-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-medium);
+  background-color: var(--bg-primary);
+  border: none;
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
-  transform: scale(0.95);
+  transform: scale(0.96);
   transition: transform var(--transition-fast);
 }
 
@@ -45,7 +43,8 @@
 }
 
 .modal-header {
-  padding: 16px 20px;
+  padding: 8px 16px;
+  min-height: 53px;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -53,31 +52,33 @@
 }
 
 .modal-title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--text-primary);
 }
 
 .modal-close {
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-primary);
   cursor: pointer;
-  font-size: 20px;
-  padding: 4px;
+  font-size: 24px;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .modal-close:hover {
-  color: var(--text-primary);
+  background-color: var(--bg-hover);
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 16px 20px 24px 20px;
 }
 
 .modal-footer {
@@ -95,18 +96,18 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: var(--space-lg) 0;
+  padding: var(--space-md) 0;
 }
 
 .profile-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   margin-top: 12px;
   color: var(--text-primary);
 }
 
 .profile-role-badge {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .profile-details-grid {
@@ -117,24 +118,29 @@
 }
 
 .profile-detail-item {
-  background-color: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 12px;
+  background-color: var(--bg-surface);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-width: 0;
 }
 
 .profile-detail-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
 }
 
 .profile-detail-value {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text-primary);
-  word-break: break-all;
+  word-break: break-word;
+}
+
+@media (max-width: 420px) {
+  .profile-details-grid {
+    grid-template-columns: 1fr;
+  }
 }

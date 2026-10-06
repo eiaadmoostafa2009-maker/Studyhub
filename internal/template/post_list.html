@@ -17,7 +17,6 @@
           <button 
             type="button" 
             class="btn btn-secondary btn-sm" 
-            style="padding: 3px 8px; font-size: 11px;"
             data-action="post-edit"
             onclick="document.getElementById('edit-box-{{.ID}}').style.display = document.getElementById('edit-box-{{.ID}}').style.display === 'none' ? 'block' : 'none';"
           >
@@ -28,7 +27,6 @@
           <button 
             type="button" 
             class="btn btn-danger btn-sm" 
-            style="padding: 3px 8px; font-size: 11px;"
             hx-delete="/posts/{{.ID}}/delete" 
             hx-target="closest .posts-feed-stream" 
             hx-swap="none"
